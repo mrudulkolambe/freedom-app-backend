@@ -3,17 +3,31 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express()
 const port = 5500
-const userRouter = require('./Routes/user')
+const customerRouter = require('./Routes/customer')
+const applicantionRouter = require('./Routes/application')
 require('dotenv').config()
 app.use(cors())
+var bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: false }))
+var MongoClient = require('mongodb').MongoClient
 
+// parse application/json
+app.use(bodyParser.json())
 
-mongoose.connect(`${process.env.MONGODB_URI}`, () => {
-	console.log('Connected To Database!');
-});
+// mongoose.connect(`${process.env.MONGODB_URI}`, { useNewUrlParser: true, ssl: true, sslValidate: false }, (err) => {
+// 	console.log(err)
+// });
+MongoClient.connect(
+	`${process.env.MONGODB_URI}`, {
+	// sslValidate: true,
+	useNewUrlParser: true
+},
+	function (err, client) {
+		console.log(err + " , " + client);
+	});
 
-app.use("/user", userRouter)
-app.use("/property", userRouter)
+app.use("/customer", customerRouter)
+app.use("/applicantion", applicantionRouter)
 
 app.get('/', (req, res) => {
 	res.send('Hello World!')
