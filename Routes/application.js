@@ -4,9 +4,9 @@ const router = express.Router();
 
 
 //ADD APPLICANT
-router.get('/', async (req, res) => {
+router.get('/:id', async (req, res) => {
 	try {
-		const applicants = await ApplicantionModel.find()
+		const applicants = await ApplicantionModel.find({customer: req.params.id})
 		res.status(200).json(applicants);
 	} catch (err) {
 		res.status(400).json({ message: err.message })
