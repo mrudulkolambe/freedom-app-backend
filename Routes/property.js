@@ -3,6 +3,16 @@ const router = express.Router();
 const Property = require('../Models/propertyModel')
 
 
+//GET ALL PROPERTIES OF USER
+router.post('/user/:id', async (req, res) => {
+	try {
+		const properties = await Property.find({customerId: req.params.id})
+		res.status(200).json(properties);
+	} catch (err) {
+		res.status(400).json({ message: err.message })
+	}
+})
+
 //ADD PROPERTY
 router.post('/add', async (req, res) => {
 	const property = new Property(req.body)
